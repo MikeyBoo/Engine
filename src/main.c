@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "display.h"
+#include "vector.h"
 
 bool is_running = false;
 
@@ -49,7 +50,9 @@ void render(void) {
 
     draw_rect(10,10,10,10, 0xFFFF0000);
     draw_rect(100,100,10,10, 0xFFFF0000);
-    draw_grid();
+    //draw_grid();
+
+    draw_pixel(20, 20, 0xffffff00);
 
     render_color_buffer();
     clear_color_buffer(0xFF8080FF);
@@ -62,6 +65,8 @@ int main(void) {
     is_running = initialize_window();
 
     setup();
+
+    vec3_t myvector = {2.0, 3.0, -4.0};
 
     while (is_running) {
         process_input();
