@@ -105,9 +105,14 @@ void update(void) {
 
         vec3_t vector_ab = vec3_sub(vector_b, vector_a);
         vec3_t vector_ac = vec3_sub(vector_c, vector_a);
+        vec3_normalize(&vector_ab);
+        vec3_normalize(&vector_ac);
 
         //computer normal
         vec3_t normal = vec3_cross(vector_ab, vector_ac);
+
+        //normalize normal in place
+        vec3_normalize(&normal);
 
         vec3_t camera_ray = vec3_sub(camera_position, vector_a);
 
@@ -141,9 +146,12 @@ void render(void) {
 
     // loop all porjected triangles and render them
 
+
+
     int num_triangles = array_length(triangles_to_render);
     for (int i = 0; i < num_triangles; i++) {
         triangle_t triangle = triangles_to_render[i];
+        /*
         draw_rect(
             triangle.points[0].x,
             triangle.points[0].y,
@@ -165,8 +173,9 @@ void render(void) {
             4,
             0xffffff00
         );
+        */
 
-        draw_triangle(
+        draw_filled_triangle(
             triangle.points[0].x, 
             triangle.points[0].y, 
             triangle.points[1].x,
@@ -176,6 +185,10 @@ void render(void) {
             0xff00ff00
         );
     }
+
+
+
+    //draw_filled_triangle(300, 100, 50, 400, 500, 700, 0xff00ff00);
 
     // clear array
     array_free(triangles_to_render);
