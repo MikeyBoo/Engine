@@ -33,8 +33,8 @@ void setup(void) {
         window_height
     );
 
-    load_cube_mesh_data();
-    //load_obj_file_data("./assets/f22.obj");
+    //load_cube_mesh_data();
+    load_obj_file_data("./assets/cult2.obj");
 }
 
 void process_input(void) {
@@ -151,18 +151,34 @@ void update(void) {
             projected_points[j].y += (window_height / 2);
         }
 
+        // calculate average depth for each face
+        float avg_depth = (transformed_vertices[0].z + transformed_vertices[1].z + transformed_vertices[2].z) / 3.0;
+
         triangle_t projected_triangle = {
             .points = {
                 {projected_points[0].x, projected_points[0].y },
                 {projected_points[1].x, projected_points[1].y },
                 {projected_points[2].x, projected_points[2].y }
             },
-            .color = mesh_face.color
+            .color = mesh_face.color,
+            .avg_depth = avg_depth
         };
 
         // save projected triangle in array of triangles to render
         //triangles_to_render[i] = Projected_triangle;
         array_push(triangles_to_render, projected_triangle);
+    }
+
+    //bubble sort
+    int num_triangles = array_length(triangles_to_render);
+    for (int i = 0; i < num_triangles; i++) {
+        for (int j = i; j < num_triangles; j++) {
+            if (triangles_to_render[i].avg_depth < triangles_to_render[j].avg_depth) {
+                triangle_t temp = triangles_to_render[i];
+                triangles_to_render[i] = triangles_to_render[j];
+                triangles_to_render[j] = temp;
+            }
+        }
     }
 }
 

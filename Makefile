@@ -1,6 +1,6 @@
 
 build:
-	gcc -Wall -std=c99 ./src/*.c \
+	gcc -g -Wall -std=c99 ./src/*.c \
 	-llua5.3 \
 	-lSDL2 \
 	-lm \
