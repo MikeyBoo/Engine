@@ -5,6 +5,7 @@
 /.vs
 /.vscode
 /Debug
+/Release
 /MyEngineVS.sln
 /MyEngineVS.vcxproj
 /MyEngineVS.vcxproj.filters
