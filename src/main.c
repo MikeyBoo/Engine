@@ -7,6 +7,7 @@
 #include "display.h"
 #include "vector.h"
 #include "mesh.h"
+#include "light.h"
 #include "matrix.h"
 
 triangle_t *triangles_to_render = NULL;
@@ -14,10 +15,11 @@ triangle_t *triangles_to_render = NULL;
 vec3_t camera_position = {0, 0, 0};
 //vec3_t cube_rotation = {.x = 0, .y = 0, .z = 0};
 
-float fov_factor = 640;
+//float fov_factor = 640;
 
 bool is_running = false;
 int previous_frame_time = 0;
+mat4_t proj_matrix;
 
 void setup(void) {
     render_method = RENDER_FILL_TRIANGLE_WIRE;
@@ -34,6 +36,14 @@ void setup(void) {
         window_width,
         window_height
     );
+
+    // init persp proj mat
+    float fov = M_PI / 3.0; //60 degrees
+    float aspect = (float)window_height / (float)window_width;
+    float znear = 0.1;
+    float zfar = 100.0;
+    proj_matrix = mat4_make_perspective(fov, aspect, znear, zfar);
+
 
     //load_cube_mesh_data();
     load_obj_file_data("./assets/cult2.obj");
@@ -66,13 +76,13 @@ void process_input(void) {
     }
 }
 
-vec2_t project(vec3_t point) {
-    vec2_t projected_point = {
-        .x = (fov_factor * point.x) / point.z,
-        .y = (fov_factor * point.y) / point.z
-    };
-    return projected_point;
-}
+//vec2_t project(vec3_t point) {
+//    vec2_t projected_point = {
+//        .x = (fov_factor * point.x) / point.z,
+//        .y = (fov_factor * point.y) / point.z
+//    };
+//    return projected_point;
+//}
 
 void update(void) {
     //while (!SDL_TICKS_PASSED(SDL_GetTicks(),previous_frame_time + FRAME_TARGET_TIME));
@@ -90,8 +100,8 @@ void update(void) {
     mesh.rotation.z += 0.01;
 
     //mesh.scale.x += 0.002;
-    mesh.translation.z = 5;
-    mesh.translation.x += 0.001;
+    mesh.translation.z = 5.0;
+    //mesh.translation.x += 0.001;
 
     mat4_t scale_matrix = mat4_make_scale(mesh.scale.x, mesh.scale.y, mesh.scale.z);
     mat4_t translation_matrix = mat4_make_translation(mesh.translation.x, mesh.translation.y, mesh.translation.z);
@@ -139,45 +149,55 @@ void update(void) {
         }
 
         // backface culling
+        vec3_t vector_a = vec3_from_vec4(transformed_vertices[0]);
+        vec3_t vector_b = vec3_from_vec4(transformed_vertices[1]);
+        vec3_t vector_c = vec3_from_vec4(transformed_vertices[2]);
+
+        vec3_t vector_ab = vec3_sub(vector_b, vector_a);
+        vec3_t vector_ac = vec3_sub(vector_c, vector_a);
+        vec3_normalize(&vector_ab);
+        vec3_normalize(&vector_ac);
+
+        //computer normal
+        vec3_t normal = vec3_cross(vector_ab, vector_ac);
+
+        //normalize normal in place
+        vec3_normalize(&normal);
+
+        vec3_t camera_ray = vec3_sub(camera_position, vector_a);
+
+        //calculate dot product for culling
+        float dot_normal_camera = vec3_dot(normal, camera_ray);
+
         if (cull_method == CULL_BACKFACE) {
-            vec3_t vector_a = vec3_from_vec4(transformed_vertices[0]);
-            vec3_t vector_b = vec3_from_vec4(transformed_vertices[1]);
-            vec3_t vector_c = vec3_from_vec4(transformed_vertices[2]);
-
-            vec3_t vector_ab = vec3_sub(vector_b, vector_a);
-            vec3_t vector_ac = vec3_sub(vector_c, vector_a);
-            vec3_normalize(&vector_ab);
-            vec3_normalize(&vector_ac);
-
-            //computer normal
-            vec3_t normal = vec3_cross(vector_ab, vector_ac);
-
-            //normalize normal in place
-            vec3_normalize(&normal);
-
-            vec3_t camera_ray = vec3_sub(camera_position, vector_a);
-
-            //calculate dot product for culling
-            float dot_normal_camera = vec3_dot(normal, camera_ray);
-
             //skip triangles not facing camera
             if (dot_normal_camera < 0) {
                 continue;
             }
         }
 
-        vec2_t projected_points[3];
+        vec4_t projected_points[3];
 
         for (int j = 0; j < 3; j++) {
-            projected_points[j] = project(vec3_from_vec4(transformed_vertices[j]));
+            projected_points[j] = mat4_mul_vec4_project(proj_matrix, transformed_vertices[j]);
 
-            //scale and translate
-            projected_points[j].x += (window_width / 2);
-            projected_points[j].y += (window_height / 2);
+            //scale first
+            projected_points[j].x *= (window_width / 2.0);
+            projected_points[j].y *= (window_height / 2.0);
+
+            // translate
+            projected_points[j].x += (window_width / 2.0);
+            projected_points[j].y += (window_height / 2.0);
         }
 
         // calculate average depth for each face
         float avg_depth = (transformed_vertices[0].z + transformed_vertices[1].z + transformed_vertices[2].z) / 3.0;
+
+        // calc shading intensity on normal
+        float light_intensity_factor = -vec3_dot(normal, light.direction);
+
+        // calc light angle
+        uint32_t triangle_color = light_apply_intensity(mesh_face.color, light_intensity_factor);
 
         triangle_t projected_triangle = {
             .points = {
@@ -185,7 +205,7 @@ void update(void) {
                 {projected_points[1].x, projected_points[1].y },
                 {projected_points[2].x, projected_points[2].y }
             },
-            .color = mesh_face.color,
+            .color = triangle_color,
             .avg_depth = avg_depth
         };
 
@@ -249,8 +269,7 @@ void render(void) {
                 triangle.points[1].y,
                 triangle.points[2].x,
                 triangle.points[2].y,
-                //triangle.color
-                0xff00ff00
+                triangle.color
             );
         }
 
