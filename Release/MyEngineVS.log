@@ -1,0 +1,33 @@
+﻿  array.c
+  display.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\display.h(7,10): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  light.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\light.c(13,1): warning C4244: 'initializing': conversion from 'float' to 'uint32_t', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\light.c(14,1): warning C4244: 'initializing': conversion from 'float' to 'uint32_t', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\light.c(15,1): warning C4244: 'initializing': conversion from 'float' to 'uint32_t', possible loss of data
+  main.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\main.c(5,10): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  matrix.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(42,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(43,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(54,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(55,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(66,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(67,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(89,44): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\matrix.c(90,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  mesh.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\mesh.c(58,12): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\mesh.c(67,13): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\mesh.c(75,13): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  triangle.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\display.h(7,10): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  vector.c
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(5,39): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(45,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(51,51): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(104,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(111,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(120,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Mikey\source\repos\MikeyBoo\MyEngine\src\vector.c(129,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
